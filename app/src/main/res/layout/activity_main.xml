@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="409dp"
+        android:layout_height="184dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="54dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textResult" />
+
+    <Spinner
+        android:id="@+id/spinnerCreditProgram"
+        android:layout_width="227dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="13dp"
+        android:entries="@array/creditprograms"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextPeriod"
+        android:layout_width="181dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="149dp"
+        android:layout_marginBottom="13dp"
+        android:ems="10"
+        android:hint="Період"
+        android:inputType="text"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCalculate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="221dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="109dp"
+        android:layout_marginBottom="4dp"
+        android:text="Введіть розмір погашення"
+        app:layout_constraintBottom_toTopOf="@+id/editTextRepayment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="219dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="111dp"
+        android:layout_marginBottom="4dp"
+        android:text="Введіть період (к-сть місяців)"
+        app:layout_constraintBottom_toTopOf="@+id/editTextPeriod"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="232dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="98dp"
+        android:layout_marginBottom="4dp"
+        android:text="Оберіть кредитну програму"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerCreditProgram"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAboutMe" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="223dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="107dp"
+        android:layout_marginBottom="4dp"
+        android:text="Введіть суму запозичення"
+        app:layout_constraintBottom_toTopOf="@+id/editTextSum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextSum"
+        android:layout_width="181dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="149dp"
+        android:layout_marginBottom="13dp"
+        android:ems="10"
+        android:hint="Сума запозичення"
+        android:inputType="text"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonCalculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="197dp"
+        android:layout_marginBottom="8dp"
+        android:text="Розрахувати"
+        app:layout_constraintBottom_toTopOf="@+id/textResult"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextRepayment"
+        android:layout_width="181dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="13dp"
+        android:ems="10"
+        android:hint="Розмір погашення"
+        android:inputType="text"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textResult"
+        android:layout_width="209dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginEnd="122dp"
+        android:layout_marginBottom="263dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonAboutMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="274dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="28dp"
+        android:text="Про себе"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

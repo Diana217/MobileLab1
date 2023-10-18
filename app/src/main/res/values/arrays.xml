@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="creditprograms">
+        <item>7% річних, 24 місяці</item>
+        <item>5% річних, 36 місяців</item>
+        <item>4,5% річних, 48 місяців</item>
+        <item>3,75% річних, 60 місяців</item>
+    </string-array>
+</resources>
