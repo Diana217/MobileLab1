@@ -8,8 +8,8 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
-        android:layout_width="409dp"
-        android:layout_height="184dp"
+        android:layout_width="377dp"
+        android:layout_height="171dp"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="54dp"
         app:layout_constraintBottom_toBottomOf="parent"
