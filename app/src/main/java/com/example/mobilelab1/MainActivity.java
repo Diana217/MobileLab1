@@ -2,20 +2,21 @@ package com.example.mobilelab1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.os.Build;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -24,23 +25,33 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Map;
 
+public class MainActivity extends AppCompatActivity {
     private Spinner spinnerCreditProgram;
     private EditText editTextSum;
     private EditText editTextRepayment;
     private EditText editTextPeriod;
     private TextView textResult;
     private LineChart chart;
+    File file;
+    HashMap<String, String> savedValues = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupFile();
         initializeViews();
         setListeners();
-        restoreSavedValues();
+        restoreValues();
     }
 
     private void initializeViews() {
@@ -54,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-
         Button calculateButton = findViewById(R.id.buttonCalculate);
         calculateButton.setOnClickListener(v -> calculateResult());
 
@@ -65,26 +75,74 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void restoreSavedValues() {
-        String savedProgram = getSavedValue("creditprogram");
+    public void setupFile(){
+        File dir = Environment.getExternalStorageDirectory();
+        file = new File(dir,"data");
+        if (!file.exists()) {
+            try {
+                if (Build.VERSION.SDK_INT >= 30){
+                    if (!Environment.isExternalStorageManager()){
+                        Intent getpermission = new Intent();
+                        getpermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                        startActivity(getpermission);
+                    }
+                }
+                file.createNewFile();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    }
+
+    private void saveToFile(HashMap<String, String> values) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+
+            for (Map.Entry<String, String> entry : values.entrySet()) {
+                outputStreamWriter.write(entry.getKey() + ":" + entry.getValue() + "\n");
+            }
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private HashMap<String, String> getFromFile() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    savedValues.put(parts[0], parts[1]);
+                }
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return savedValues;
+    }
+
+    private void restoreValues() {
+        getFromFile();
+
+        String savedProgram = savedValues.get("creditprogram");
         int programPosition = ((ArrayAdapter<String>) spinnerCreditProgram.getAdapter()).getPosition(savedProgram);
         spinnerCreditProgram.setSelection(programPosition);
-
-        editTextSum.setText(getSavedValue("sum"));
-        editTextPeriod.setText(getSavedValue("period"));
-        editTextRepayment.setText(getSavedValue("repayment"));
+        editTextSum.setText(savedValues.get("sum"));
+        editTextPeriod.setText(savedValues.get("period"));
+        editTextRepayment.setText(savedValues.get("repayment"));
     }
 
-    private String getSavedValue(String key) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        return sharedPreferences.getString(key, "");
-    }
-
-    private void saveValue(String key, String value) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
-        editor.apply();
+    private void saveToHashMap(String key, String value) {
+        savedValues.put(key, value);
     }
 
     private void calculateResult() {
@@ -94,13 +152,14 @@ public class MainActivity extends AppCompatActivity {
         String periodStr = editTextPeriod.getText().toString();
         String repaymentStr = editTextRepayment.getText().toString();
 
-        saveValue("creditprogram", creditProgram);
-        saveValue("sum", sumStr);
-        saveValue("period", periodStr);
-        saveValue("repayment", repaymentStr);
+        saveToHashMap("creditprogram", creditProgram);
+        saveToHashMap("sum", sumStr);
+        saveToHashMap("period", periodStr);
+        saveToHashMap("repayment", repaymentStr);
+
+        saveToFile(savedValues);
 
         StringBuilder resultStrBuilder = new StringBuilder();
-
         try {
             int sum = Integer.parseInt(sumStr);
             int period = Integer.parseInt(periodStr);
@@ -147,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             resultStrBuilder.append("Щось пішло не так..");
         }
-
         textResult.setText(resultStrBuilder.toString());
     }
 
